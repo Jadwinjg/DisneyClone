@@ -1,47 +1,49 @@
- const express = require("express");
+const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcryptjs"); // Use bcryptjs to match your controller if needed
-const db = require("../db");
+const bcrypt = require("bcryptjs");
+const db = require("../db"); // This now refers to your pg Pool instance
 
 // Register route
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const checkQuery = "SELECT * FROM users WHERE email = ?";
-  db.query(checkQuery, [email], async (err, result) => {
-    if (err) return res.status(500).json({ message: "Database error" });
+  try {
+    const checkQuery = "SELECT * FROM users WHERE email = $1";
+    const checkResult = await db.query(checkQuery, [email]);
 
-    if (result.length > 0) {
+    if (checkResult.rows.length > 0) {
       return res.status(409).json({ message: "Email already registered" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const insertQuery = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    db.query(insertQuery, [name, email, hashedPassword], (err, result) => {
-      if (err) return res.status(500).json({ message: "Registration failed" });
-      return res.status(201).json({ message: "User registered successfully" });
-    });
-  });
+    const insertQuery = "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)";
+    await db.query(insertQuery, [name, email, hashedPassword]);
+
+    return res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    console.error("Register error:", err.message);
+    return res.status(500).json({ message: "Registration failed" });
+  }
 });
 
 // Login route
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const checkQuery = "SELECT * FROM users WHERE email = ?";
-  db.query(checkQuery, [email], async (err, result) => {
-    if (err) return res.status(500).json({ message: "Database error" });
+  try {
+    const checkQuery = "SELECT * FROM users WHERE email = $1";
+    const result = await db.query(checkQuery, [email]);
 
-    if (result.length === 0) {
+    if (result.rows.length === 0) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const user = result[0];
+    const user = result.rows[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -52,7 +54,10 @@ router.post("/login", (req, res) => {
       message: "Login successful",
       user: { id: user.id, name: user.name, email: user.email },
     });
-  });
+  } catch (err) {
+    console.error("Login error:", err.message);
+    return res.status(500).json({ message: "Database error" });
+  }
 });
 
 module.exports = router;
