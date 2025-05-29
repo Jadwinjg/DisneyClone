@@ -1,8 +1,7 @@
 const { Pool } = require("pg");
 
-// Correctly encode special characters in the password ('@' becomes '%40')
 const pool = new Pool({
-  connectionString: "postgresql://postgres:Sairam%40123@db.lumnkjtivtfouwbwrxun.supabase.co:5432/postgres",
+  connectionString: "postgresql://postgres.lumnkjtivtfouwbwrxun:Sairam%40123@aws-0-ap-south-1.pooler.supabase.com:6543/postgres",
   ssl: { rejectUnauthorized: false },
 });
 
