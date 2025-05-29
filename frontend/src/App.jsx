@@ -15,93 +15,92 @@ import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter basename="/JADWIN/disney1">
-      <div className="w-full overflow-x-hidden">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+    <BrowserRouter>
+  <div className="w-full overflow-x-hidden">
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/upload"
+        element={
+          <PrivateRoute>
+            <div className="min-h-screen bg-black">
+              <Navbar />
+              <VideoUploads />
+            </div>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <>
+              <Navbar />
+              <Home />
+            </>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/movies"
+        element={
+          <PrivateRoute>
+            <>
+              <Navbar />
+              <Movies />
+            </>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/search"
+        element={
+          <PrivateRoute>
+            <>
+              <Navbar />
+              <Search />
+            </>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/watchlist"
+        element={
+          <PrivateRoute>
+            <>
+              <Navbar />
+              <Watchlist />
+            </>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/originals"
+        element={
+          <PrivateRoute>
+            <>
+              <Navbar />
+              <Originals />
+            </>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/series"
+        element={
+          <PrivateRoute>
+            <>
+              <Navbar />
+              <Series />
+            </>
+          </PrivateRoute>
+        }
+      />
+    </Routes>
+  </div>
+</BrowserRouter>
 
-          <Route
-            path="/upload"
-            element={
-              <PrivateRoute>
-                <div className="min-h-screen bg-black">
-                  <Navbar />
-                  <VideoUploads />
-                </div>
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <>
-                  <Navbar />
-                  <Home />
-                </>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/movies"
-            element={
-              <PrivateRoute>
-                <>
-                  <Navbar />
-                  <Movies />
-                </>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/search"
-            element={
-              <PrivateRoute>
-                <>
-                  <Navbar />
-                  <Search />
-                </>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/watchlist"
-            element={
-              <PrivateRoute>
-                <>
-                  <Navbar />
-                  <Watchlist />
-                </>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/originals"
-            element={
-              <PrivateRoute>
-                <>
-                  <Navbar />
-                  <Originals />
-                </>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/series"
-            element={
-              <PrivateRoute>
-                <>
-                  <Navbar />
-                  <Series />
-                </>
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
   );
 }
 
