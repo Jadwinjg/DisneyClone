@@ -5,21 +5,27 @@ const path = require("path");
 
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
-const port = 5000;
 
-app.use(cors());
+// ✅ CORS settings to allow Vercel frontend
+app.use(cors({
+  origin: "https://cinehub.vercel.app", // your Vercel frontend domain
+  credentials: true
+}));
+
+// ✅ Middleware
 app.use(bodyParser.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-
+// ✅ Routes
 app.use("/api", authRoutes);
-app.use("/api", uploadRoutes); 
-app.use('/api/user', userRoutes);
+app.use("/api", uploadRoutes);
+app.use("/api/user", userRoutes);
 
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// ✅ Dynamic port binding for Render (important!)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
