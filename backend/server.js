@@ -9,9 +9,10 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-// ✅ CORS settings to allow Vercel frontend
+// ✅ CORS settings: allow requests from any origin
 app.use(cors({
-  origin: "https://cine-hub-project-fullstack.vercel.app", // your Vercel frontend domain
+  origin: "*", // allow all origins (for public access)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   credentials: true
 }));
 
@@ -24,7 +25,7 @@ app.use("/api", authRoutes);
 app.use("/api", uploadRoutes);
 app.use("/api/user", userRoutes);
 
-// ✅ Dynamic port binding for Render (important!)
+// ✅ Dynamic port binding for Render
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
