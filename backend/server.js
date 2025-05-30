@@ -11,7 +11,7 @@ const app = express();
 
 // ✅ CORS settings to allow Vercel frontend
 app.use(cors({
-  origin: "https://cinehub.vercel.app", // your Vercel frontend domain
+  origin: "https://cine-hub-project-fullstack.vercel.app", // your Vercel frontend domain
   credentials: true
 }));
 
